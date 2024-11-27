@@ -1,0 +1,179 @@
+#include<bits/stdc++.h>
+#define max 15
+using namespace std;
+class vehicle{
+	protected:
+		string number;
+		string type;
+	public:
+		vehicle(){}
+		vehicle(string number,string type){
+			this->number=number;
+			this->type=type;
+		}
+		virtual void display(){         //overriden function
+			cout<<" Number: "<<number<<" Type: "<<type<<endl;
+		}
+		string getn(){
+			return number;
+		}
+};
+class bike:public vehicle{
+	public:
+		bike(string number){
+			this->number=number;
+			this->type="Bike";
+		}
+		void display(){
+			cout<<"BIKE: "<<endl;
+			vehicle::display();
+		}
+};
+class car:public vehicle{
+	public:
+		car(string number){
+			this->number=number;
+			this->type="Car";
+		}
+		void display(){
+			cout<<"CAR: "<<endl;
+			vehicle::display();
+		}
+};
+class other:public vehicle{
+	public:
+		other(string number){
+			this->number=number;
+			this->type="Other vehicle";
+		}
+		void display(){
+			cout<<"OTHER: "<<endl;
+			vehicle::display();
+		}
+};
+class parkingspot{
+	vehicle *obj;
+	bool occupied;
+	public:
+		parkingspot(){
+			obj=NULL;
+			occupied=false;
+		}
+		void park(vehicle *v){
+			if(occupied){
+				cout<<"Spot is already filled."<<endl;
+			}
+			else{
+				obj=v;
+				occupied=true;
+				cout<<"Vehicle Parked Successfully."<<endl;
+			}
+		}
+		void remove(){
+			if(occupied){
+				cout<<"Vehicle with number plate "<<obj->getn()<<" removed successfully."<<endl;
+				delete obj;
+				obj=NULL;
+				occupied=false;
+			}
+			else{
+				cout<<"Parking Slot is already empty."<<endl;
+			}
+		}
+		void display(){
+			if(occupied){
+				obj->display();
+			}
+			else{
+				cout<<" Empty Spot"<<endl;
+			}
+		}
+		bool isoccupied(){
+			return occupied;
+		}
+};
+int main(){
+	parkingspot arr[max];
+	string number;
+	int choice,slot;
+	while(1){
+		cout<<"***MENU***"<<endl;
+		cout<<"1.Park a bike"<<endl;
+		cout<<"2.Park a car"<<endl;
+		cout<<"3.Park any other vehicle"<<endl;
+		cout<<"4.Remove a vehicle"<<endl;
+		cout<<"5.Display all spots"<<endl;
+		cout<<"6.Display empty spots"<<endl;
+		cout<<"7.Exit"<<endl;
+		cout<<"Enter your choice: ";
+		cin>>choice;
+		switch(choice){
+			case 1:
+				cout<<"Enter bike number : ";
+				cin>>number;
+				cout<<"Enter a slot for parking from 1 to "<<max<<" : ";
+				cin>>slot;
+				if(slot>=1&&slot<=max){
+					arr[slot-1].park(new bike(number));
+				}
+				else{
+					cout<<"Invalid spot number."<<endl;
+				}
+				break;
+			case 2:
+				cout<<"Enter car number : ";
+				cin>>number;
+				cout<<"Enter a slot for parking from 1 to "<<max<<" : ";
+				cin>>slot;
+				if(slot>=1&&slot<=max){
+					arr[slot-1].park(new car(number));
+				}
+				else{
+					cout<<"Invalid spot number."<<endl;
+				}
+				break;
+			case 3:
+				cout<<"Enter the vehicle number : ";
+				cin>>number;
+				cout<<"Enter a slot for parking from 1 to "<<max<<" : ";
+				cin>>slot;
+				if(slot>=1&&slot<=max){
+					arr[slot-1].park(new other(number));
+				}
+				else{
+					cout<<"Invalid spot number."<<endl;
+				}
+				break;
+			case 4:
+				cout<<"Enter a slot number to remove a vehicle from parking (1 to "<<max<<"): ";
+				cin>>slot;
+				if(slot>=1&&slot<=max)
+				arr[slot-1].remove();
+				else
+				cout<<"Invalid spot number."<<endl;
+				break;
+			case 5:
+				cout<<"All spots: "<<endl;
+				for(int i=0;i<max;i++){
+					cout<<"Spot : "<<(i+1);
+					arr[i].display();
+				}
+				break;
+			case 6:
+				cout<<"Displaying empty spots: "<<endl;
+				for(int i=0;i<max;i++){
+					if(!arr[i].isoccupied()){
+						cout<<"Spot: "<<(i+1)<<" : Empty"<<endl;
+					}
+				}
+				break;
+			case 7:
+				cout<<"Exiting the program..."<<endl;
+				exit(0);
+				break;
+			default:
+				cout<<"Enter a correct choice."<<endl;
+		}
+	}
+	return 0;
+}
